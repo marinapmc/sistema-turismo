@@ -7,6 +7,6 @@ import java.util.Optional;
 
 @Repository
 public interface AgenciaRepository extends JpaRepository<Agencia, Long> {
-    Optional<Agencia> findByEmail(String email);
-    Optional<Agencia> findByCnpj(String cnpj);
+    Optional<Agencia> findByEmail(String email); // Método para buscar agência por email
+    Optional<Agencia> findByCnpj(String cnpj); // Método para buscar agência por CNPJ
 }

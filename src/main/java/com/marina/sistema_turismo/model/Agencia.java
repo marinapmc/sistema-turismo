@@ -8,11 +8,11 @@ import jakarta.validation.constraints.NotBlank;
 @Table(name = "agencias")
 public class Agencia {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id // Indica que este campo é a chave primária
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Geração automática de ID
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false) // Define a coluna como única e não nula
     @Email
     @NotBlank
     private String email;
@@ -21,7 +21,7 @@ public class Agencia {
     @NotBlank
     private String senha;
 
-    @Column(unique = true, nullable = false, length = 14)
+    @Column(unique = true, nullable = false, length = 14) // CNPJ tem 14 dígitos
     @NotBlank
     private String cnpj;
 
@@ -29,7 +29,7 @@ public class Agencia {
     @NotBlank
     private String nome;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT") // Permite uma descrição mais longa
     private String descricao;
 
     // Getters e Setters

@@ -6,15 +6,15 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
-@Entity
+@Entity // Indica que esta classe é uma entidade JPA
 @Table(name = "clientes")
 public class Cliente {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id // Indica que este campo é a chave primária
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Geração automática de ID
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false) // Define a coluna como única e não nula
     @Email
     @NotBlank
     private String email;
@@ -23,7 +23,7 @@ public class Cliente {
     @NotBlank
     private String senha;
 
-    @Column(unique = true, nullable = false, length = 11)
+    @Column(unique = true, nullable = false, length = 11) // CPF tem 11 dígitos
     @NotBlank
     private String cpf;
 
@@ -31,9 +31,9 @@ public class Cliente {
     @NotBlank
     private String nome;
 
-    private String telefone;
+    private String telefone; // Telefone é opcional, então não tem @NotBlank
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING) 
     private Sexo sexo;
 
     @Column(name = "data_nascimento")

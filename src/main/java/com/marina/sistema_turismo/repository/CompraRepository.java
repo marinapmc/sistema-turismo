@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface CompraRepository extends JpaRepository<Compra, Long> {
-    List<Compra> findByCliente(Cliente cliente);
+    List<Compra> findByCliente(Cliente cliente); // Método para buscar compras por cliente
 }

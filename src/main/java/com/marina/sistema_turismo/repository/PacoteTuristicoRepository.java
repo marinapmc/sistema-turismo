@@ -9,8 +9,8 @@ import java.util.List;
 
 @Repository
 public interface PacoteTuristicoRepository extends JpaRepository<PacoteTuristico, Long> {
-    List<PacoteTuristico> findByAgencia(Agencia agencia);
-    List<PacoteTuristico> findByPais(String pais);
-    List<PacoteTuristico> findByCidade(String cidade);
-    List<PacoteTuristico> findByDataPartidaAfter(LocalDate data);
+    List<PacoteTuristico> findByAgencia(Agencia agencia); // Método para buscar pacotes por agência
+    List<PacoteTuristico> findByPais(String pais); // Método para buscar pacotes por país
+    List<PacoteTuristico> findByCidade(String cidade); // Método para buscar pacotes por cidade
+    List<PacoteTuristico> findByDataPartidaAfter(LocalDate data); // Método para buscar pacotes com data de partida após uma data específica
 }

@@ -8,18 +8,18 @@ import java.time.LocalDateTime;
 public class Compra {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Geração automática de ID
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "cliente_id", nullable = false)
+    @ManyToOne // Relacionamento muitos-para-um com Cliente
+    @JoinColumn(name = "cliente_id", nullable = false) // Chave estrangeira para Cliente
     private Cliente cliente;
 
-    @ManyToOne
-    @JoinColumn(name = "pacote_id", nullable = false)
+    @ManyToOne // Relacionamento muitos-para-um com PacoteTuristico
+    @JoinColumn(name = "pacote_id", nullable = false) // Chave estrangeira para PacoteTuristico
     private PacoteTuristico pacote;
 
-    @Column(name = "data_compra")
+    @Column(name = "data_compra") 
     private LocalDateTime dataCompra;
 
     // Getters e Setters
