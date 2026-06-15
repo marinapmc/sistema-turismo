@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(#{page.minhasCompras})}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div class="container">
+    <h2 class="mb-4" th:text="#{page.minhasCompras}">Minhas Compras</h2>
+
+    <div th:if="${sucesso}" class="alert alert-success" th:text="${sucesso}"></div>
+
+    <div th:if="${#lists.isEmpty(compras)}" class="text-center py-5">
+        <p class="text-muted" th:text="#{msg.nenhumRegistro}">Você ainda não comprou nenhum pacote.</p>
+        <a th:href="@{/pacotes}" class="btn btn-primary" th:text="#{btn.verPacotes}">Ver Pacotes</a>
+    </div>
+
+    <div class="row g-4" th:if="${!#lists.isEmpty(compras)}">
+        <div class="col-md-6" th:each="compra : ${compras}">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title"
+                        th:text="${compra.pacote.cidade + ', ' + compra.pacote.estado + ', ' + compra.pacote.pais}"></h5>
+                    <p class="text-muted" th:text="${compra.pacote.agencia.nome}"></p>
+                    <ul class="list-unstyled small">
+                        <li><strong th:text="#{campo.dataCompra}">Compra em:</strong>
+                            <span th:text="${#temporals.format(compra.dataCompra, 'dd/MM/yyyy HH:mm')}"></span></li>
+                        <li><strong th:text="#{campo.dataPartida}">Partida:</strong>
+                            <span th:text="${#temporals.format(compra.pacote.dataPartida, 'dd/MM/yyyy')}"></span></li>
+                        <li><strong th:text="#{campo.duracao}">Duração:</strong>
+                            <span th:text="${compra.pacote.duracao + ' dias'}"></span></li>
+                        <li><strong th:text="#{campo.valor}">Valor:</strong>
+                            <span th:text="${'R$ ' + #numbers.formatDecimal(compra.pacote.valor, 1, 2)}"></span></li>
+                    </ul>
+                    <a th:if="${compra.linkReuniao != null}"
+                       th:href="${compra.linkReuniao}" target="_blank"
+                       class="btn btn-sm btn-outline-success" th:text="#{btn.reuniao}">Link da Reunião</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

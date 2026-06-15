@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head(#{page.pacotes})}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div class="container">
+    <h2 class="mb-3" th:text="#{page.pacotes}">Pacotes Turísticos</h2>
+
+    <!-- Filtros -->
+    <form th:action="@{/pacotes}" method="get" class="row g-2 mb-4">
+        <div class="col-md-4">
+            <input type="text" name="destino" class="form-control"
+                   th:value="${destino}" th:placeholder="#{filtro.destino}"/>
+        </div>
+        <div class="col-md-4">
+            <input type="text" name="agencia" class="form-control"
+                   th:value="${agencia}" th:placeholder="#{filtro.agencia}"/>
+        </div>
+        <div class="col-md-3">
+            <input type="date" name="dataPartida" class="form-control"
+                   th:value="${dataPartida}"/>
+        </div>
+        <div class="col-md-1">
+            <button type="submit" class="btn btn-primary w-100" th:text="#{btn.filtrar}">Filtrar</button>
+        </div>
+    </form>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col" th:each="p : ${pacotes}">
+            <div class="card h-100 shadow-sm">
+                <img th:if="${p.fotos != null and !p.fotos.isEmpty()}"
+                     th:src="@{/{foto}(foto=${p.fotos[0]})}"
+                     class="card-img-top" style="height:180px;object-fit:cover" alt="foto"/>
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${p.cidade + ', ' + p.estado + ', ' + p.pais}"></h5>
+                    <p class="card-text text-muted" th:text="${p.agencia.nome}"></p>
+                    <ul class="list-unstyled small">
+                        <li><strong th:text="#{campo.dataPartida}">Partida:</strong>
+                            <span th:text="${#temporals.format(p.dataPartida, 'dd/MM/yyyy')}"></span></li>
+                        <li><strong th:text="#{campo.duracao}">Duração:</strong>
+                            <span th:text="${p.duracao + ' dias'}"></span></li>
+                        <li><strong th:text="#{campo.valor}">Valor:</strong>
+                            <span th:text="${'R$ ' + #numbers.formatDecimal(p.valor, 1, 2)}"></span></li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <a th:href="@{/pacotes/{id}(id=${p.id})}" class="btn btn-outline-primary btn-sm" th:text="#{btn.verDetalhes}">Ver Detalhes</a>
+                </div>
+            </div>
+        </div>
+        <div th:if="${#lists.isEmpty(pacotes)}" class="col-12">
+            <p class="text-center text-muted" th:text="#{msg.nenhumRegistro}">Nenhum pacote encontrado.</p>
+        </div>
+    </div>
+</div>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

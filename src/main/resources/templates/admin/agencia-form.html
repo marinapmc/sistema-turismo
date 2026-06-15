@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(#{page.agencias})}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div class="container" style="max-width:600px">
+    <h2 class="mb-4" th:text="${agencia.id} != null ? #{form.editarAgencia} : #{form.novaAgencia}">Agência</h2>
+
+    <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
+
+    <form th:action="${agencia.id} != null ? @{/admin/agencias/editar/{id}(id=${agencia.id})} : @{/admin/agencias/nova}"
+          th:object="${agencia}" method="post">
+
+        <div class="mb-3">
+            <label class="form-label" th:text="#{campo.nome}">Nome</label>
+            <input type="text" th:field="*{nome}" class="form-control"
+                   th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'"/>
+            <div class="invalid-feedback" th:errors="*{nome}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" th:text="#{campo.email}">E-mail</label>
+            <input type="email" th:field="*{email}" class="form-control"
+                   th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'"
+                   th:readonly="${agencia.id} != null"/>
+            <div class="invalid-feedback" th:errors="*{email}"></div>
+        </div>
+
+        <div class="mb-3" th:if="${agencia.id} == null">
+            <label class="form-label" th:text="#{campo.senha}">Senha</label>
+            <input type="password" th:field="*{senha}" class="form-control"
+                   th:classappend="${#fields.hasErrors('senha')} ? 'is-invalid'"/>
+            <div class="invalid-feedback" th:errors="*{senha}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" th:text="#{campo.cnpj}">CNPJ (14 dígitos)</label>
+            <input type="text" th:field="*{cnpj}" class="form-control" maxlength="14"
+                   th:classappend="${#fields.hasErrors('cnpj')} ? 'is-invalid'"
+                   th:readonly="${agencia.id} != null"/>
+            <div class="invalid-feedback" th:errors="*{cnpj}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" th:text="#{campo.descricao}">Descrição</label>
+            <textarea th:field="*{descricao}" class="form-control" rows="4"></textarea>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary" th:text="#{btn.salvar}">Salvar</button>
+            <a th:href="@{/admin/agencias}" class="btn btn-secondary" th:text="#{btn.cancelar}">Cancelar</a>
+        </div>
+    </form>
+</div>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

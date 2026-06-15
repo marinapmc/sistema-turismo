@@ -8,16 +8,19 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+// Representa um pacote turístico cadastrado por uma agência
+// Contém destino, datas, valor, fotos e roteiro em PDF
 @Entity
 @Table(name = "pacotes_turisticos")
 public class PacoteTuristico {
 
-    @Id // Indica que este campo é a chave primária
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Geração automática de ID
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne // Relacionamento muitos-para-um com Agencia
-    @JoinColumn(name = "agencia_id", nullable = false) // Chave estrangeira para Agencia
+    // Agência responsável pelo pacote — chave estrangeira para a tabela agencias
+    @ManyToOne
+    @JoinColumn(name = "agencia_id", nullable = false)
     private Agencia agencia;
 
     @NotBlank
@@ -37,24 +40,26 @@ public class PacoteTuristico {
     @Positive
     private Integer duracao;
 
+    // Valor com até 10 dígitos no total e 2 casas decimais
     @NotNull
     @Positive
     @Column(precision = 10, scale = 2)
-    private BigDecimal valor; // Valor do pacote turístico
+    private BigDecimal valor;
 
+    // Caminho do arquivo PDF do roteiro, salvo em disco 
     @Column(name = "roteiro_pdf")
-    private String roteiroPdf; // URL ou caminho para o arquivo PDF do roteiro
+    private String roteiroPdf;
 
-    // Lista de URLs das fotos do pacote
+    // Lista de caminhos das fotos do pacote, salvas em disco
+    // @ElementCollection cria uma tabela separada "pacote_fotos" para guardar esses caminhos
     @ElementCollection
     @CollectionTable(
-        name = "pacote_fotos", 
+        name = "pacote_fotos",
         joinColumns = @JoinColumn(name = "pacote_id")
     )
     @Column(name = "foto")
     private List<String> fotos;
 
-    // Getters e Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -82,16 +87,13 @@ public class PacoteTuristico {
     public String getRoteiroPdf() { return roteiroPdf; }
     public void setRoteiroPdf(String roteiroPdf) { this.roteiroPdf = roteiroPdf; }
 
-    public List<String> getFotos() { return fotos; } // Getter para a lista de fotos
+    public List<String> getFotos() { return fotos; }
 
     public void setFotos(List<String> fotos) {
-
-    if (fotos != null && fotos.size() > 10) {
-        throw new IllegalArgumentException(
-            "O pacote pode possuir no máximo 10 fotos."
-        );
-    }
-
-    this.fotos = fotos;
+        // Limita o número de fotos por pacote a 10
+        if (fotos != null && fotos.size() > 10) {
+            throw new IllegalArgumentException("O pacote pode possuir no máximo 10 fotos.");
+        }
+        this.fotos = fotos;
     }
 }

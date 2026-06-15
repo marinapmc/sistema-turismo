@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(#{page.clientes})}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 th:text="#{page.clientes}">Clientes</h2>
+        <a th:href="@{/admin/clientes/novo}" class="btn btn-success" th:text="#{btn.novo}">Novo</a>
+    </div>
+
+    <div th:if="${sucesso}" class="alert alert-success" th:text="${sucesso}"></div>
+    <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th th:text="#{campo.nome}">Nome</th>
+                <th th:text="#{campo.email}">E-mail</th>
+                <th th:text="#{campo.cpf}">CPF</th>
+                <th th:text="#{campo.telefone}">Telefone</th>
+                <th th:text="#{campo.acoes}">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="c : ${clientes}">
+                <td th:text="${c.nome}"></td>
+                <td th:text="${c.email}"></td>
+                <td th:text="${c.cpf}"></td>
+                <td th:text="${c.telefone}"></td>
+                <td>
+                    <a th:href="@{/admin/clientes/editar/{id}(id=${c.id})}" class="btn btn-sm btn-warning" th:text="#{btn.editar}">Editar</a>
+                    <form th:action="@{/admin/clientes/excluir/{id}(id=${c.id})}" method="post" class="d-inline"
+                          onsubmit="return confirm('Confirmar exclusão?')">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <button type="submit" class="btn btn-sm btn-danger" th:text="#{btn.excluir}">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(clientes)}">
+                <td colspan="5" class="text-center" th:text="#{msg.nenhumRegistro}">Nenhum cliente cadastrado.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

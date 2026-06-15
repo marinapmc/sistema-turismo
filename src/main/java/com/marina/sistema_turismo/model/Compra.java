@@ -3,26 +3,34 @@ package com.marina.sistema_turismo.model;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+// Representa a compra de um pacote turístico por um cliente
+// Registra quem comprou, qual pacote, quando e o link da videoconferência gerado
 @Entity
 @Table(name = "compras")
 public class Compra {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Geração automática de ID
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne // Relacionamento muitos-para-um com Cliente
-    @JoinColumn(name = "cliente_id", nullable = false) // Chave estrangeira para Cliente
+    // Cliente que realizou a compra — chave estrangeira para a tabela clientes
+    @ManyToOne
+    @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 
-    @ManyToOne // Relacionamento muitos-para-um com PacoteTuristico
-    @JoinColumn(name = "pacote_id", nullable = false) // Chave estrangeira para PacoteTuristico
+    // Pacote que foi comprado — chave estrangeira para a tabela pacotes_turisticos
+    @ManyToOne
+    @JoinColumn(name = "pacote_id", nullable = false)
     private PacoteTuristico pacote;
 
-    @Column(name = "data_compra") 
+    // Data e hora exata em que a compra foi registrada
+    @Column(name = "data_compra")
     private LocalDateTime dataCompra;
 
-    // Getters e Setters
+    // Link da videoconferência (Jitsi Meet) gerado automaticamente na hora da compra
+    @Column(name = "link_reuniao")
+    private String linkReuniao;
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -34,4 +42,7 @@ public class Compra {
 
     public LocalDateTime getDataCompra() { return dataCompra; }
     public void setDataCompra(LocalDateTime dataCompra) { this.dataCompra = dataCompra; }
+
+    public String getLinkReuniao() { return linkReuniao; }
+    public void setLinkReuniao(String linkReuniao) { this.linkReuniao = linkReuniao; }
 }

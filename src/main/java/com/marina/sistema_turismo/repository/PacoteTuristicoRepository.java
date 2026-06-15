@@ -3,14 +3,40 @@ package com.marina.sistema_turismo.repository;
 import com.marina.sistema_turismo.model.Agencia;
 import com.marina.sistema_turismo.model.PacoteTuristico;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import java.time.LocalDate;
 import java.util.List;
 
-@Repository
+// Repositório de pacotes turísticos com métodos de busca e filtro
 public interface PacoteTuristicoRepository extends JpaRepository<PacoteTuristico, Long> {
-    List<PacoteTuristico> findByAgencia(Agencia agencia); // Método para buscar pacotes por agência
-    List<PacoteTuristico> findByPais(String pais); // Método para buscar pacotes por país
-    List<PacoteTuristico> findByCidade(String cidade); // Método para buscar pacotes por cidade
-    List<PacoteTuristico> findByDataPartidaAfter(LocalDate data); // Método para buscar pacotes com data de partida após uma data específica
+
+    // Todos os pacotes de uma agência específica
+    List<PacoteTuristico> findByAgencia(Agencia agencia);
+
+    // Apenas os pacotes "vigentes" (data de partida futura) de uma agência
+    // Usado no filtro "apenas vigentes" da área da agência
+    List<PacoteTuristico> findByAgenciaAndDataPartidaAfter(Agencia agencia, LocalDate data);
+
+    // Pacotes com data de partida a partir de uma data — usado no filtro público
+    List<PacoteTuristico> findByDataPartidaAfter(LocalDate data);
+
+    List<PacoteTuristico> findByPais(String pais);
+    List<PacoteTuristico> findByCidade(String cidade);
+
+    // Busca pacotes pelo id da agência — usado na API REST sem precisar carregar o objeto Agencia
+    List<PacoteTuristico> findByAgencia_Id(Long agenciaId);
+
+    // Busca por destino em cidade, estado ou país com LIKE case-insensitive
+    // Permite encontrar "Rio de Janeiro" digitando apenas "rio" ou "janeiro"
+    @Query("SELECT p FROM PacoteTuristico p WHERE " +
+           "LOWER(p.cidade) LIKE LOWER(CONCAT('%', :termo, '%')) OR " +
+           "LOWER(p.estado) LIKE LOWER(CONCAT('%', :termo, '%')) OR " +
+           "LOWER(p.pais) LIKE LOWER(CONCAT('%', :termo, '%'))")
+    List<PacoteTuristico> findByDestino(@Param("termo") String termo);
+
+    // Busca pacotes pelo nome da agência — usado no filtro público da lista de pacotes
+    @Query("SELECT p FROM PacoteTuristico p JOIN p.agencia a WHERE " +
+           "LOWER(a.nome) LIKE LOWER(CONCAT('%', :nomeAgencia, '%'))")
+    List<PacoteTuristico> findByNomeAgencia(@Param("nomeAgencia") String nomeAgencia);
 }

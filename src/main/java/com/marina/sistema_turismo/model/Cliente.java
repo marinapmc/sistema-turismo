@@ -1,29 +1,20 @@
 package com.marina.sistema_turismo.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
-@Entity // Indica que esta classe é uma entidade JPA
+// Representa um cliente do sistema
+// Herda id, email e senha de Usuario
+// No banco, os dados específicos do cliente ficam na tabela "clientes",
+// ligada à tabela "usuarios" pelo mesmo id
+@Entity
 @Table(name = "clientes")
-public class Cliente {
+public class Cliente extends Usuario {
 
-    @Id // Indica que este campo é a chave primária
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Geração automática de ID
-    private Long id;
-
-    @Column(unique = true, nullable = false) // Define a coluna como única e não nula
-    @Email
-    @NotBlank
-    private String email;
-
-    @Column(nullable = false)
-    @NotBlank
-    private String senha;
-
-    @Column(unique = true, nullable = false, length = 11) // CPF tem 11 dígitos
+    // CPF único e obrigatório com exatamente 11 dígitos
+    @Column(unique = true, nullable = false, length = 11)
     @NotBlank
     private String cpf;
 
@@ -31,24 +22,14 @@ public class Cliente {
     @NotBlank
     private String nome;
 
-    private String telefone; // Telefone é opcional, então não tem @NotBlank
+    private String telefone;
 
-    @Enumerated(EnumType.STRING) 
+    @Enumerated(EnumType.STRING)
     private Sexo sexo;
 
     @Column(name = "data_nascimento")
     @NotNull
     private LocalDate dataNascimento;
-
-    // Getters e Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-
-    public String getSenha() { return senha; }
-    public void setSenha(String senha) { this.senha = senha; }
 
     public String getCpf() { return cpf; }
     public void setCpf(String cpf) { this.cpf = cpf; }

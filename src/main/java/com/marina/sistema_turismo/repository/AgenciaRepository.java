@@ -5,8 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
+// Repositório de agências — mesma estrutura do ClienteRepository
+// Busca por e-mail é usada para verificar duplicatas antes de salvar
+// Busca por CNPJ segue a mesma lógica
 @Repository
 public interface AgenciaRepository extends JpaRepository<Agencia, Long> {
-    Optional<Agencia> findByEmail(String email); // Método para buscar agência por email
-    Optional<Agencia> findByCnpj(String cnpj); // Método para buscar agência por CNPJ
+    Optional<Agencia> findByEmail(String email);
+    Optional<Agencia> findByCnpj(String cnpj);
 }

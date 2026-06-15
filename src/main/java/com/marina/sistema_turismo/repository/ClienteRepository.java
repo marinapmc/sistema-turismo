@@ -5,8 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
+// Repositório de clientes — o Spring Data JPA gera a implementação automaticamente
+// Só é necessário declarar os métodos de busca específicos; o CRUD básico já vem do JpaRepository
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
-    Optional<Cliente> findByEmail(String email); // Método para buscar cliente por email
-    Optional<Cliente> findByCpf(String cpf); // Método para buscar cliente por CPF
+    // O Spring traduz o nome do método para SQL: SELECT * FROM ... WHERE email = ?
+    Optional<Cliente> findByEmail(String email);
+    Optional<Cliente> findByCpf(String cpf);
 }

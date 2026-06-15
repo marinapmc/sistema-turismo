@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Uploads e logs gerados em runtime ###
+uploads/
+app-*.txt
