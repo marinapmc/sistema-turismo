@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.time.LocalDate;
 
-// Controlador MVC para a área pública de pacotes (R4) — sem necessidade de login
+// Controlador MVC para a área pública de pacotes — sem necessidade de login
 // produces = TEXT_HTML_VALUE diferencia este controller do REST controller que usa a mesma rota /pacotes
 // Quando o navegador solicita HTML, vem para cá; quando solicita JSON, vai para o PacoteRestController
 @Controller
@@ -23,7 +23,6 @@ public class PacoteController {
     }
 
     // Lista todos os pacotes com filtros opcionais por destino, agência e data de partida
-    // Os parâmetros vêm da URL: /pacotes?destino=rio&agencia=viagens&dataPartida=2026-08-01
     @GetMapping(value = "/pacotes", produces = MediaType.TEXT_HTML_VALUE)
     public String listar(@RequestParam(required = false) String destino,
                          @RequestParam(required = false) String agencia,
@@ -39,7 +38,7 @@ public class PacoteController {
     }
 
     // Exibe os detalhes de um pacote específico pelo id
-    // Também mostra o botão de compra (visível só para clientes logados via sec:authorize no template)
+    // Também mostra o botão de compra
     @GetMapping(value = "/pacotes/{id}", produces = MediaType.TEXT_HTML_VALUE)
     public String detalhe(@PathVariable Long id, Model model) {
         var pacote = pacoteService.buscarPorId(id)

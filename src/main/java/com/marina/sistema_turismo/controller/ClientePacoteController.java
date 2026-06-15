@@ -9,7 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-// Controlador do histórico de compras do cliente (R6)
+// Controlador do histórico de compras do cliente 
 // Mostra todos os pacotes que o cliente logado já comprou, com o link da videoconferência
 @Controller
 @RequestMapping("/cliente")

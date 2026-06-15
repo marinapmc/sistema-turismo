@@ -7,7 +7,7 @@ import java.util.List;
 
 // Repositório de compras
 // Permite buscar o histórico de compras de um cliente de duas formas:
-// passando o objeto Cliente diretamente, ou apenas o id (usado pela API REST)
+// passando o objeto Cliente diretamente, ou apenas o id 
 public interface CompraRepository extends JpaRepository<Compra, Long> {
     // Usado nos controllers MVC onde o objeto Cliente já está disponível na sessão
     List<Compra> findByCliente(Cliente cliente);

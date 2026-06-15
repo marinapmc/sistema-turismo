@@ -15,7 +15,7 @@ public class HomeController {
         // Se não está logado, mostra a página inicial pública
         if (auth == null || !auth.isAuthenticated()) return "index";
 
-        // Agência e cliente são representados pelo nosso UserDetailsImpl
+        // Agência e cliente são representados pelo UserDetailsImpl
         if (auth.getPrincipal() instanceof UserDetailsImpl principal) {
             return switch (principal.getRole()) {
                 case "ROLE_AGENCIA" -> "redirect:/agencia/pacotes"; // área da agência

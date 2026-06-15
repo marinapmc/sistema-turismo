@@ -44,7 +44,7 @@ public class ClienteService {
             (cliente.getId() == null || !clienteRepository.findByCpf(cliente.getCpf()).get().getId().equals(cliente.getId()))) {
             throw new IllegalArgumentException("CPF já cadastrado.");
         }
-        // Codifica a senha apenas no cadastro inicial (id == null significa novo cliente)
+        // Codifica a senha apenas no cadastro inicial
         if (cliente.getId() == null) {
             cliente.setSenha(passwordEncoder.encode(cliente.getSenha()));
         }

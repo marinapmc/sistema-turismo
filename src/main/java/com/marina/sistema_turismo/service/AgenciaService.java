@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-// Camada de negócio para agências — mesma estrutura do ClienteService
+// Camada de negócio para agências 
 // Valida e-mail e CNPJ únicos antes de salvar, e codifica a senha em BCrypt
 @Service
 public class AgenciaService {

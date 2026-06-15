@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-// Controlador responsável pela compra de um pacote turístico (R5)
-// Acessível apenas por clientes logados (ROLE_CLIENTE), conforme o SecurityConfig
+// Controlador responsável pela compra de um pacote turístico 
 @Controller
 @RequestMapping("/compras")
 public class CompraController {

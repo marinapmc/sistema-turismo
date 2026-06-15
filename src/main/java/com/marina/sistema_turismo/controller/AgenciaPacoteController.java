@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
-// Controlador MVC para agências gerenciarem seus próprios pacotes (R3 e R7)
+// Controlador MVC para agências gerenciarem seus próprios pacotes 
 @Controller
 @RequestMapping("/agencia/pacotes")
 public class AgenciaPacoteController {
@@ -35,7 +35,7 @@ public class AgenciaPacoteController {
     }
 
     // Lista os pacotes da agência logada
-    // O parâmetro ?vigentes=true filtra só os com data de partida futura (R7)
+    // O parâmetro ?vigentes=true filtra só os com data de partida futura
     @GetMapping
     public String listar(@AuthenticationPrincipal UserDetailsImpl principal,
                          @RequestParam(required = false) Boolean vigentes,
@@ -57,8 +57,6 @@ public class AgenciaPacoteController {
     }
 
     // Salva o pacote com as fotos e o roteiro PDF enviados pelo formulário
-    // Usa MultipartHttpServletRequest para buscar os arquivos diretamente da requisição,
-    // evitando conflito com o binding do @ModelAttribute que processa os campos primeiro
     @PostMapping("/novo")
     public String salvar(@AuthenticationPrincipal UserDetailsImpl principal,
                          @Valid @ModelAttribute PacoteTuristico pacote,
@@ -80,7 +78,7 @@ public class AgenciaPacoteController {
             Agencia agencia = (Agencia) principal.getUsuario();
             pacote.setAgencia(agencia);
 
-            // Filtra apenas arquivos não-vazios (o browser sempre envia ao menos uma parte vazia)
+            // Filtra apenas arquivos não-vazios e limita a 10 fotos por pacote
             boolean temFotos = fotosUpload.stream().anyMatch(f -> !f.isEmpty());
             if (temFotos) {
                 long count = fotosUpload.stream().filter(f -> !f.isEmpty()).count();

@@ -25,7 +25,7 @@ public class UserDetailsImpl implements UserDetails {
         this.senha = usuario.getSenha();
 
         // Determina o papel com base no tipo real do objeto
-        // Como usamos herança JOINED, o Hibernate retorna Agencia ou Cliente, não Usuario genérico
+        // Hibernate retorna Agencia ou Cliente
         if (usuario instanceof Agencia) {
             this.role = "ROLE_AGENCIA";
         } else if (usuario instanceof Cliente) {
@@ -35,7 +35,7 @@ public class UserDetailsImpl implements UserDetails {
         }
     }
 
-    // Permite que os controllers acessem o objeto completo (com cpf, cnpj, etc.)
+    // Permite que os controllers acessem o objeto
     public Long getId() { return id; }
     public Usuario getUsuario() { return usuario; }
     public String getRole() { return role; }

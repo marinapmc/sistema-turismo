@@ -32,13 +32,11 @@ public class PacoteTuristicoService {
     }
 
     // Retorna só os pacotes com data de partida futura (pacotes "vigentes")
-    // Usado no filtro "apenas vigentes" da área da agência (R7)
     public List<PacoteTuristico> buscarVigentesPorAgencia(Agencia agencia) {
         return pacoteRepository.findByAgenciaAndDataPartidaAfter(agencia, LocalDate.now());
     }
 
-    // Filtro combinado para a listagem pública (R4)
-    // Só um filtro é aplicado por vez, em ordem de prioridade: destino > agência > data
+    // Filtro combinado para a listagem pública
     public List<PacoteTuristico> filtrar(String destino, String nomeAgencia, LocalDate dataPartida) {
         if (destino != null && !destino.isBlank()) {
             return pacoteRepository.findByDestino(destino.trim());

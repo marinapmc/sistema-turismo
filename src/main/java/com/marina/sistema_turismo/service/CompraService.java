@@ -22,6 +22,7 @@ public class CompraService {
     }
 
     public Compra realizarCompra(Cliente cliente, PacoteTuristico pacote) {
+        // Cria a compra associando o cliente e o pacote, e registra a data/hora 
         Compra compra = new Compra();
         compra.setCliente(cliente);
         compra.setPacote(pacote);
@@ -31,24 +32,23 @@ public class CompraService {
         Compra salva = compraRepository.save(compra);
 
         // Gera link do Jitsi Meet com o id da compra para identificar a sala
-        // O Jitsi é gratuito e não exige API key — qualquer pessoa com o link entra na sala
+        // O Jitsi é gratuito e não exige API key 
         String linkReuniao = "https://meet.jit.si/TurismoReuniao" + salva.getId();
         salva.setLinkReuniao(linkReuniao);
         salva = compraRepository.save(salva);
 
         // Envia e-mail ao cliente e à agência com os detalhes e o link da reunião
-        // Falhas no envio são registradas no log mas não interrompem a compra
         emailService.enviarConfirmacaoCompra(salva);
 
         return salva;
     }
 
-    // Usado na área do cliente (MVC) — o objeto Cliente já está disponível na sessão
+    // Usado na área do cliente 
     public List<Compra> listarPorCliente(Cliente cliente) {
         return compraRepository.findByCliente(cliente);
     }
 
-    // Usado na API REST — busca por id sem precisar do objeto Cliente
+    // Usado na API REST (busca por id sem precisar do objeto Cliente)
     public List<Compra> listarPorClienteId(Long clienteId) {
         return compraRepository.findByCliente_Id(clienteId);
     }

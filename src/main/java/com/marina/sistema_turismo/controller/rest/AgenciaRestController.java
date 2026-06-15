@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-// API REST para agências — mesma estrutura do ClienteRestController
+// API REST para agências 
 // Todos os endpoints são públicos e retornam JSON
 @RestController
 @RequestMapping(value = "/agencias", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -9,7 +9,6 @@ import java.util.Optional;
 // Só é necessário declarar os métodos de busca específicos; o CRUD básico já vem do JpaRepository
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
-    // O Spring traduz o nome do método para SQL: SELECT * FROM ... WHERE email = ?
     Optional<Cliente> findByEmail(String email);
     Optional<Cliente> findByCpf(String cpf);
 }

@@ -9,8 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-// Controlador MVC para o CRUD de agências — acessível apenas pelo admin (R2)
-// Segue a mesma estrutura do AdminClienteController
+// Controlador MVC para o CRUD de agências — acessível apenas pelo admin 
 @Controller
 @RequestMapping("/admin/agencias")
 public class AdminAgenciaController {

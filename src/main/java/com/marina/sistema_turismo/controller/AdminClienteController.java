@@ -10,8 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-// Controlador MVC para o CRUD de clientes — acessível apenas pelo admin (R1)
-// Todas as rotas começam com /admin/clientes, protegidas pelo SecurityConfig
+// Controlador MVC para o CRUD de clientes — acessível apenas pelo admin 
 @Controller
 @RequestMapping("/admin/clientes")
 public class AdminClienteController {
@@ -32,8 +31,8 @@ public class AdminClienteController {
     // Exibe o formulário vazio para cadastrar um novo cliente
     @GetMapping("/novo")
     public String formNovo(Model model) {
-        model.addAttribute("cliente", new Cliente()); // objeto vazio para o Thymeleaf preencher
-        model.addAttribute("sexos", Sexo.values());   // lista de opções do enum para o select
+        model.addAttribute("cliente", new Cliente()); 
+        model.addAttribute("sexos", Sexo.values());   
         return "admin/cliente-form";
     }
 

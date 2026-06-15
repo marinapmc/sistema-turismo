@@ -13,7 +13,6 @@ import org.springframework.security.web.SecurityFilterChain;
 
 // Configuração central do Spring Security
 // Define quem pode acessar o quê, como o login funciona e como o logout é feito
-// Usa a API moderna do Spring Security 6 com SecurityFilterChain (não mais WebSecurityConfigurerAdapter)
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -35,8 +34,7 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf
-                // CSRF é uma proteção para formulários HTML — desativamos apenas nos endpoints REST,
-                // pois clientes de API (Postman, mobile) não enviam o token CSRF
+                // CSRF é uma proteção para formulários HTML — desativa apenas nos endpoints REST
                 .ignoringRequestMatchers(
                     "/clientes", "/clientes/**",
                     "/agencias", "/agencias/**",
@@ -50,10 +48,10 @@ public class SecurityConfig {
                 // Página inicial e login são acessíveis por todos
                 .requestMatchers("/", "/login", "/erro").permitAll()
 
-                // Listagem e detalhe de pacotes são públicos (R4)
+                // Listagem e detalhe de pacotes são públicos 
                 .requestMatchers(HttpMethod.GET, "/pacotes", "/pacotes/*").permitAll()
 
-                // Todos os endpoints REST são públicos (sem autenticação), conforme AA-2
+                // Todos os endpoints REST são públicos 
                 .requestMatchers(HttpMethod.GET,
                     "/clientes", "/clientes/**",
                     "/agencias", "/agencias/**",

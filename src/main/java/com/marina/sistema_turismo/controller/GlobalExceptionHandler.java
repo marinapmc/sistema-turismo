@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
     // Trata 404 — quando nenhuma rota corresponde à URL acessada
     @ExceptionHandler(NoHandlerFoundException.class)
     public Object handleNotFound(NoHandlerFoundException ex, Model model, HttpServletRequest request) {
-        // favicon.ico é pedido automaticamente pelo browser — não é erro real
+        // favicon.ico é pedido automaticamente pelo browser
         if (ex.getRequestURL().endsWith("favicon.ico")) {
             return ResponseEntity.noContent().build();
         }

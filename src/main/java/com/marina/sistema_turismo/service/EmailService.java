@@ -9,7 +9,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 // Serviço responsável pelo envio de e-mails de confirmação de compra
-// Usa o JavaMailSender do Spring, configurado com as propriedades spring.mail.* no application.properties
+// Usa o JavaMailSender do Spring, configurado no application.properties
 @Service
 public class EmailService {
 
