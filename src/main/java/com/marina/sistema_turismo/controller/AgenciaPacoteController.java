@@ -59,7 +59,7 @@ public class AgenciaPacoteController {
     // Salva o pacote com as fotos e o roteiro PDF enviados pelo formulário
     @PostMapping("/novo")
     public String salvar(@AuthenticationPrincipal UserDetailsImpl principal,
-                         @Valid @ModelAttribute PacoteTuristico pacote,
+                         @Valid @ModelAttribute("pacote") PacoteTuristico pacote,
                          BindingResult result,
                          MultipartHttpServletRequest multipartRequest,
                          Model model, RedirectAttributes redirect) {
