@@ -42,8 +42,7 @@ public class SecurityConfig {
                 )
             )
             .authorizeHttpRequests(auth -> auth
-                // Arquivos estáticos e uploads são públicos (CSS, JS, imagens, PDFs)
-                .requestMatchers("/css/**", "/js/**", "/images/**", "/uploads/**").permitAll()
+                .requestMatchers("/css/**", "/js/**", "/images/**", "/fotos/**", "/roteiros/**").permitAll()
 
                 // Página inicial e login são acessíveis por todos
                 .requestMatchers("/", "/login", "/erro").permitAll()
