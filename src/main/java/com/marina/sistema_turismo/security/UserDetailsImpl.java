@@ -1,5 +1,6 @@
 package com.marina.sistema_turismo.security;
 
+import com.marina.sistema_turismo.model.Admin;
 import com.marina.sistema_turismo.model.Agencia;
 import com.marina.sistema_turismo.model.Cliente;
 import com.marina.sistema_turismo.model.Usuario;
@@ -25,8 +26,10 @@ public class UserDetailsImpl implements UserDetails {
         this.senha = usuario.getSenha();
 
         // Determina o papel com base no tipo real do objeto
-        // Hibernate retorna Agencia ou Cliente
-        if (usuario instanceof Agencia) {
+        // Hibernate retorna Admin, Agencia ou Cliente
+        if (usuario instanceof Admin) {
+            this.role = "ROLE_ADMIN";
+        } else if (usuario instanceof Agencia) {
             this.role = "ROLE_AGENCIA";
         } else if (usuario instanceof Cliente) {
             this.role = "ROLE_CLIENTE";

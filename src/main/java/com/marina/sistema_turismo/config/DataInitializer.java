@@ -1,12 +1,15 @@
 package com.marina.sistema_turismo.config;
 
+import com.marina.sistema_turismo.model.Admin;
 import com.marina.sistema_turismo.model.Agencia;
 import com.marina.sistema_turismo.model.Cliente;
 import com.marina.sistema_turismo.model.PacoteTuristico;
 import com.marina.sistema_turismo.model.Sexo;
+import com.marina.sistema_turismo.repository.AdminRepository;
 import com.marina.sistema_turismo.repository.AgenciaRepository;
 import com.marina.sistema_turismo.repository.ClienteRepository;
 import com.marina.sistema_turismo.repository.PacoteTuristicoRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,12 +25,23 @@ public class DataInitializer {
 
     @Bean
     CommandLineRunner inicializar(
+            AdminRepository adminRepo,
             AgenciaRepository agenciaRepo,
             ClienteRepository clienteRepo,
             PacoteTuristicoRepository pacoteRepo,
-            PasswordEncoder encoder) {
+            PasswordEncoder encoder,
+            @Value("${app.admin.email}") String adminEmail,
+            @Value("${app.admin.senha}") String adminSenha) {
 
         return args -> {
+            // Cria o admin no banco caso ainda não exista 
+            if (adminRepo.findByEmail(adminEmail).isEmpty()) {
+                Admin admin = new Admin();
+                admin.setEmail(adminEmail);
+                admin.setSenha(encoder.encode(adminSenha));
+                adminRepo.save(admin);
+            }
+
             // Se já existir pelo menos uma agência, o banco já foi populado e pula a inicialização
             if (agenciaRepo.count() > 0) return;
 
