@@ -4,7 +4,9 @@ import com.marina.sistema_turismo.model.Cliente;
 import com.marina.sistema_turismo.model.Compra;
 import com.marina.sistema_turismo.model.PacoteTuristico;
 import com.marina.sistema_turismo.repository.CompraRepository;
+import com.marina.sistema_turismo.repository.PacoteTuristicoRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,15 +16,27 @@ import java.util.List;
 public class CompraService {
 
     private final CompraRepository compraRepository;
+    private final PacoteTuristicoRepository pacoteRepository;
     private final EmailService emailService;
 
-    public CompraService(CompraRepository compraRepository, EmailService emailService) {
+    public CompraService(CompraRepository compraRepository,
+                         PacoteTuristicoRepository pacoteRepository,
+                         EmailService emailService) {
         this.compraRepository = compraRepository;
+        this.pacoteRepository = pacoteRepository;
         this.emailService = emailService;
     }
 
+    // @Transactional garante que o decremento da vaga e o registro da compra
+    // aconteçam como uma única operação atômica
+    @Transactional
     public Compra realizarCompra(Cliente cliente, PacoteTuristico pacote) {
-        // Cria a compra associando o cliente e o pacote, e registra a data/hora 
+        // Tenta ocupar uma vaga; se não sobrou nenhuma, interrompe antes de criar a compra
+        if (pacoteRepository.decrementarVaga(pacote.getId()) == 0) {
+            throw new IllegalArgumentException("Não há mais vagas disponíveis para este pacote.");
+        }
+
+        // Cria a compra associando o cliente e o pacote, e registra a data/hora
         Compra compra = new Compra();
         compra.setCliente(cliente);
         compra.setPacote(pacote);

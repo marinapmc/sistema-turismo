@@ -49,6 +49,12 @@
                        th:classappend="${#fields.hasErrors('valor')} ? 'is-invalid'"/>
                 <div class="invalid-feedback" th:errors="*{valor}"></div>
             </div>
+            <div class="col-md-4">
+                <label class="form-label" th:text="#{campo.vagas}">Vagas disponíveis</label>
+                <input type="number" th:field="*{vagasDisponiveis}" class="form-control" min="1"
+                       th:classappend="${#fields.hasErrors('vagasDisponiveis')} ? 'is-invalid'"/>
+                <div class="invalid-feedback" th:errors="*{vagasDisponiveis}"></div>
+            </div>
 
             <div class="col-12">
                 <label class="form-label" th:text="#{campo.fotos}">Fotos (máx. 10)</label>

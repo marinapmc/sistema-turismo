@@ -46,6 +46,14 @@ public class PacoteTuristico {
     @Column(precision = 10, scale = 2)
     private BigDecimal valor;
 
+    // Controle de estoque: quantas vagas ainda podem ser compradas
+    // Sem @Column(nullable = false) de propósito — evita falha de migração em pacotes já
+    // existentes no banco; a obrigatoriedade é garantida pela validação abaixo
+    @Column(name = "vagas_disponiveis")
+    @NotNull
+    @Positive
+    private Integer vagasDisponiveis;
+
     // Caminho do arquivo PDF do roteiro, salvo em disco 
     @Column(name = "roteiro_pdf")
     private String roteiroPdf;
@@ -83,6 +91,9 @@ public class PacoteTuristico {
 
     public BigDecimal getValor() { return valor; }
     public void setValor(BigDecimal valor) { this.valor = valor; }
+
+    public Integer getVagasDisponiveis() { return vagasDisponiveis; }
+    public void setVagasDisponiveis(Integer vagasDisponiveis) { this.vagasDisponiveis = vagasDisponiveis; }
 
     public String getRoteiroPdf() { return roteiroPdf; }
     public void setRoteiroPdf(String roteiroPdf) { this.roteiroPdf = roteiroPdf; }

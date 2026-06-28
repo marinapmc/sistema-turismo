@@ -74,6 +74,7 @@ public class DataInitializer {
             pacote1.setDataPartida(LocalDate.now().plusMonths(2)); // partida daqui a 2 meses
             pacote1.setDuracao(7);
             pacote1.setValor(new BigDecimal("2500.00"));
+            pacote1.setVagasDisponiveis(20);
             pacote1.setFotos(List.of());
             pacoteRepo.save(pacote1);
 
@@ -85,6 +86,7 @@ public class DataInitializer {
             pacote2.setDataPartida(LocalDate.now().plusMonths(3));
             pacote2.setDuracao(5);
             pacote2.setValor(new BigDecimal("1800.00"));
+            pacote2.setVagasDisponiveis(15);
             pacote2.setFotos(List.of());
             pacoteRepo.save(pacote2);
         };

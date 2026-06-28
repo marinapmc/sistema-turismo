@@ -42,6 +42,11 @@
                             <span th:text="${p.duracao + ' dias'}"></span></li>
                         <li><strong th:text="#{campo.valor}">Valor:</strong>
                             <span th:text="${'R$ ' + #numbers.formatDecimal(p.valor, 1, 2)}"></span></li>
+                        <li>
+                            <strong th:text="#{campo.vagas}">Vagas:</strong>
+                            <span th:if="${p.vagasDisponiveis > 0}" th:text="${p.vagasDisponiveis}"></span>
+                            <span th:unless="${p.vagasDisponiveis > 0}" class="text-danger fw-bold" th:text="#{msg.esgotado}">Esgotado</span>
+                        </li>
                     </ul>
                 </div>
                 <div class="card-footer">

@@ -3,6 +3,7 @@ package com.marina.sistema_turismo.repository;
 import com.marina.sistema_turismo.model.Agencia;
 import com.marina.sistema_turismo.model.PacoteTuristico;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import java.time.LocalDate;
@@ -38,4 +39,13 @@ public interface PacoteTuristicoRepository extends JpaRepository<PacoteTuristico
     @Query("SELECT p FROM PacoteTuristico p JOIN p.agencia a WHERE " +
            "LOWER(a.nome) LIKE LOWER(CONCAT('%', :nomeAgencia, '%'))")
     List<PacoteTuristico> findByNomeAgencia(@Param("nomeAgencia") String nomeAgencia);
+
+    // Decrementa uma vaga de forma atômica, só se ainda houver vaga disponível
+    // O UPDATE com a condição "vagasDisponiveis > 0" na própria query evita que duas
+    // compras simultâneas decrementem além de zero (condição de corrida)
+    // Retorna quantas linhas foram afetadas: 0 significa que não havia mais vagas
+    @Modifying
+    @Query("UPDATE PacoteTuristico p SET p.vagasDisponiveis = p.vagasDisponiveis - 1 " +
+           "WHERE p.id = :id AND p.vagasDisponiveis > 0")
+    int decrementarVaga(@Param("id") Long id);
 }

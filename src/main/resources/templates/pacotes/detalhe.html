@@ -30,17 +30,24 @@
             <strong th:text="#{campo.valor}">Valor:</strong>
             <span th:text="${'R$ ' + #numbers.formatDecimal(pacote.valor, 1, 2)}"></span>
         </li>
+        <li class="list-group-item">
+            <strong th:text="#{campo.vagas}">Vagas disponíveis:</strong>
+            <span th:text="${pacote.vagasDisponiveis}"
+                  th:class="${pacote.vagasDisponiveis <= 0} ? 'text-danger fw-bold' : ''"></span>
+        </li>
         <li class="list-group-item" th:if="${pacote.roteiroPdf != null}">
             <a th:href="@{/{pdf}(pdf=${pacote.roteiroPdf})}" target="_blank" th:text="#{btn.verRoteiro}">Ver Roteiro (PDF)</a>
         </li>
     </ul>
 
-    <!-- Botão comprar (apenas cliente logado) -->
+    <!-- Botão comprar (apenas cliente logado, e só se ainda houver vaga) -->
     <div sec:authorize="hasRole('CLIENTE')">
-        <form th:action="@{/compras/novo/{id}(id=${pacote.id})}" method="post">
+        <form th:if="${pacote.vagasDisponiveis > 0}" th:action="@{/compras/novo/{id}(id=${pacote.id})}" method="post">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
             <button type="submit" class="btn btn-success btn-lg" th:text="#{btn.comprar}">Comprar</button>
         </form>
+        <button th:unless="${pacote.vagasDisponiveis > 0}" type="button" class="btn btn-secondary btn-lg" disabled
+                th:text="#{msg.esgotado}">Esgotado</button>
     </div>
 
     <div sec:authorize="!isAuthenticated()" class="mt-3">

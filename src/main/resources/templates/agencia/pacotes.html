@@ -25,6 +25,7 @@
                 <th th:text="#{campo.dataPartida}">Partida</th>
                 <th th:text="#{campo.duracao}">Duração</th>
                 <th th:text="#{campo.valor}">Valor</th>
+                <th th:text="#{campo.vagas}">Vagas</th>
                 <th th:text="#{campo.acoes}">Ações</th>
             </tr>
         </thead>
@@ -34,6 +35,8 @@
                 <td th:text="${#temporals.format(p.dataPartida, 'dd/MM/yyyy')}"></td>
                 <td th:text="${p.duracao + ' dias'}"></td>
                 <td th:text="${'R$ ' + #numbers.formatDecimal(p.valor, 1, 2)}"></td>
+                <td th:text="${p.vagasDisponiveis > 0} ? ${p.vagasDisponiveis} : #{msg.esgotado}"
+                    th:class="${p.vagasDisponiveis <= 0} ? 'text-danger fw-bold' : ''"></td>
                 <td>
                     <a th:href="@{/pacotes/{id}(id=${p.id})}" class="btn btn-sm btn-info" th:text="#{btn.ver}">Ver</a>
                     <form th:action="@{/agencia/pacotes/excluir/{id}(id=${p.id})}" method="post" class="d-inline"
@@ -44,7 +47,7 @@
                 </td>
             </tr>
             <tr th:if="${#lists.isEmpty(pacotes)}">
-                <td colspan="5" class="text-center" th:text="#{msg.nenhumRegistro}">Nenhum pacote.</td>
+                <td colspan="6" class="text-center" th:text="#{msg.nenhumRegistro}">Nenhum pacote.</td>
             </tr>
         </tbody>
     </table>
