@@ -6,11 +6,14 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 // Tratamento global de exceções para todos os controllers
@@ -61,6 +64,24 @@ public class GlobalExceptionHandler {
         }
         model.addAttribute("status", 409);
         model.addAttribute("mensagem", "Registro duplicado. Verifique os dados e tente novamente.");
+        return "error";
+    }
+
+    // Trata falhas de @Valid em requisições REST (@RequestBody) — sem isso, cairiam no handler
+    // genérico de Exception.class e voltariam como 500 em vez de 400 com o detalhe de cada campo
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Object handleValidacao(MethodArgumentNotValidException ex, Model model, HttpServletRequest request) {
+        Map<String, String> erros = new LinkedHashMap<>();
+        for (FieldError erro : ex.getBindingResult().getFieldErrors()) {
+            erros.put(erro.getField(), erro.getDefaultMessage());
+        }
+        log.error("Erro de validação: {}", erros);
+        if (isRestRequest(request)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("status", 400, "mensagem", "Dados inválidos.", "erros", erros));
+        }
+        model.addAttribute("status", 400);
+        model.addAttribute("mensagem", "Dados inválidos. Verifique os campos informados.");
         return "error";
     }
 
