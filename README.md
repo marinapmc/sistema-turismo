@@ -1,4 +1,4 @@
-# Sistema de Turismo — T6
+# Sistema de Turismo — T7
 
 Sistema web para compra/venda de pacotes turísticos, desenvolvido com Spring MVC, Spring Data JPA, Spring Security e Thymeleaf.
 
@@ -36,13 +36,14 @@ CREATE DATABASE turismo;
 | Tabela               | Descrição                                      |
 |----------------------|------------------------------------------------|
 | `usuarios`           | Tabela base — armazena id, email, senha (hash) |
+| `admins`             | Subtabela de `usuarios` — sem campos próprios  |
 | `agencias`           | Subtabela de `usuarios` — cnpj, nome, descrição |
 | `clientes`           | Subtabela de `usuarios` — cpf, nome, telefone, sexo, data de nascimento |
-| `pacotes_turisticos` | Pacotes cadastrados pelas agências             |
+| `pacotes_turisticos` | Pacotes cadastrados pelas agências (inclui vagas disponíveis) |
 | `pacote_fotos`       | Caminhos das fotos de cada pacote              |
 | `compras`            | Registros de compra de pacotes por clientes    |
 
-A herança entre `usuarios`, `agencias` e `clientes` usa a estratégia `JOINED` do JPA: cada registro de agência ou cliente tem uma linha em `usuarios` (com o id compartilhado) e uma linha na respectiva subtabela.
+A herança entre `usuarios`, `admins`, `agencias` e `clientes` usa a estratégia `JOINED` do JPA: cada registro de admin, agência ou cliente tem uma linha em `usuarios` (com o id compartilhado) e uma linha na respectiva subtabela.
 
 ### Configuração de conexão (`application.properties`)
 
@@ -56,13 +57,15 @@ spring.datasource.password=postgres
 
 ## Usuários pré-cadastrados
 
-Na **primeira execução** com banco vazio, o sistema popula automaticamente usuários de exemplo via `DataInitializer`. O administrador não é salvo no banco — é um usuário fixo definido em `application.properties`.
+Na **primeira execução**, o sistema popula automaticamente os usuários abaixo via `DataInitializer` — não é necessário rodar nenhum script de seed manual. O admin é criado de forma idempotente (toda vez que a aplicação sobe, caso ainda não exista); agência, cliente e pacotes de exemplo só são criados se o banco estiver totalmente vazio.
 
-| Tipo    | E-mail              | Senha      | Papel        | Salvo no banco? |
+| Tipo    | E-mail              | Senha      | Papel        | Tabelas envolvidas |
 |---------|---------------------|------------|--------------|-----------------|
-| Admin   | admin@sistema.com   | admin123   | ROLE_ADMIN   | Não (em memória) |
-| Agência | agencia@teste.com   | agencia123 | ROLE_AGENCIA | Sim (tabelas `usuarios` + `agencias`) |
-| Cliente | cliente@teste.com   | cliente123 | ROLE_CLIENTE | Sim (tabelas `usuarios` + `clientes`) |
+| Admin   | admin@sistema.com   | admin123   | ROLE_ADMIN   | `usuarios` + `admins` |
+| Agência | agencia@teste.com   | agencia123 | ROLE_AGENCIA | `usuarios` + `agencias` |
+| Cliente | cliente@teste.com   | cliente123 | ROLE_CLIENTE | `usuarios` + `clientes` |
+
+As credenciais do admin (e-mail e senha) vêm de `app.admin.email`/`app.admin.senha` em `application.properties` — a senha é codificada em BCrypt antes de salvar.
 
 ### Papéis e permissões
 
@@ -110,6 +113,7 @@ Acesse: `http://localhost:8080`
 | R7 | Pacotes da agência com filtro "apenas vigentes" | Agência |
 | R8 | Internacionalização PT/EN (`?lang=pt` / `?lang=en`) | Todos |
 | R9 | Validação de formulários com mensagens de erro | Todos |
+| R10 | Controle de estoque: vagas limitadas por pacote, decremento atômico, bloqueio quando esgota | Cliente / Agência |
 
 ---
 
@@ -132,9 +136,14 @@ DELETE /agencias/{id}           → remove agência
 
 GET    /pacotes                 → lista todos os pacotes
 GET    /pacotes/clientes/{id}   → pacotes comprados pelo cliente
-POST   /pacotes/agencias/{id}   → cria pacote para a agência (corpo JSON)
+POST   /pacotes/agencias/{id}   → cria pacote para a agência (corpo JSON, exige "vagasDisponiveis")
 GET    /pacotes/agencias/{id}   → pacotes da agência
 GET    /pacotes/destinos/{nome} → pacotes filtrados por destino
+```
+
+Erros de validação (`@Valid`) retornam `400` com o detalhe de cada campo:
+```json
+{"status": 400, "mensagem": "Dados inválidos.", "erros": {"cpf": "CPF deve conter exatamente 11 dígitos numéricos."}}
 ```
 
 ---
@@ -146,7 +155,9 @@ Arquivos salvos em `./uploads/` (relativo ao diretório de execução):
 - Fotos dos pacotes: `./uploads/fotos/`
 - Roteiros em PDF: `./uploads/roteiros/`
 
-Os arquivos são servidos diretamente pelo Spring Boot via `spring.web.resources.static-locations`.
+Os arquivos são servidos diretamente pelo Spring Boot via `spring.web.resources.static-locations`,
+publicamente em `/fotos/**` e `/roteiros/**` (sem necessidade de login, já que a listagem de
+pacotes também é pública).
 
 ---
 
