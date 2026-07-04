@@ -1,8 +1,8 @@
-# sistema-turismo-cliente-web (T8)
+# sistema-turismo-cliente-web 
 
 Aplicação Cliente REST, independente, que consome a API REST de **Clientes** exposta pelo
-projeto [sistema-turismo](../sistema-turismo) (T7). Usa `RestClient` + Spring MVC + Thymeleaf.
-Este projeto **não acessa banco de dados** — toda persistência acontece do lado do projeto T7,
+projeto [sistema-turismo](../sistema-turismo). Usa `RestClient` + Spring MVC + Thymeleaf.
+Este projeto **não acessa banco de dados** — toda persistência acontece do lado do projeto base,
 via chamadas HTTP.
 
 ## Arquitetura
@@ -15,19 +15,19 @@ via chamadas HTTP.
 
 - Java 17+
 - Maven 3.9+
-- O projeto **sistema-turismo (T7)** rodando e acessível (por padrão em `http://localhost:8080`),
+- O projeto **sistema-turismo** rodando e acessível (por padrão em `http://localhost:8080`),
   com o PostgreSQL configurado conforme o README daquele projeto.
 
 ## Como executar
 
-1. Suba primeiro a API (projeto `sistema-turismo`, T7):
+1. Suba primeiro a API (projeto `sistema-turismo`):
    ```
    cd ../sistema-turismo
    ./mvnw spring-boot:run
    ```
    Confirme que está respondendo em `http://localhost:8080/clientes`.
 
-2. Em outro terminal, suba este projeto (Cliente, T8):
+2. Em outro terminal, suba este projeto:
    ```
    cd sistema-turismo-cliente-web
    ./mvnw spring-boot:run
@@ -38,12 +38,12 @@ via chamadas HTTP.
 ## Configuração
 
 - `server.port=8081` — porta deste projeto (diferente da API, que usa 8080).
-- `api.sistema-turismo.base-url=http://localhost:8080` — endereço da API T7. Se a API rodar em
+- `api.sistema-turismo.base-url=http://localhost:8080` — endereço da API. Se a API rodar em
   outra porta/host, altere essa propriedade em `src/main/resources/application.properties`.
 
 ## Operações disponíveis (CRUD completo)
 
-| Ação             | Rota neste projeto (Cliente)     | Endpoint chamado na API (T7)  |
+| Ação             | Rota neste projeto (Cliente)     | Endpoint chamado na API    |
 |------------------|-----------------------------------|--------------------------------|
 | Listar           | `GET /clientes`                  | `GET /clientes`                |
 | Criar            | `GET /clientes/novo` + `POST /clientes` | `POST /clientes`         |
@@ -52,7 +52,7 @@ via chamadas HTTP.
 
 ## Observações
 
-- Os endpoints `/clientes/**` da API (T7) são públicos (`permitAll`), então este cliente não
+- Os endpoints `/clientes/**` da API são públicos (`permitAll`), então este cliente não
   precisa se autenticar para consumi-los.
 - O campo "Senha" precisa ser preenchido também ao editar um cliente: a API (`PUT /clientes/{id}`)
   valida o campo como obrigatório (`@NotBlank`) mesmo que a lógica de negócio só recodifique a
