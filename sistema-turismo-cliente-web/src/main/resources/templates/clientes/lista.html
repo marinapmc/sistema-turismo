@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Clientes - Cliente REST (T8)</title>
+</head>
+<body>
+    <h1>Clientes</h1>
+
+    <p th:if="${mensagem}" th:text="${mensagem}" style="color: green;"></p>
+    <p th:if="${erro}" th:text="${erro}" style="color: red;"></p>
+
+    <a th:href="@{/clientes/novo}">Novo cliente</a>
+
+    <table border="1" cellpadding="6">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>CPF</th>
+                <th>Telefone</th>
+                <th>Sexo</th>
+                <th>Data de nascimento</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="cliente : ${clientes}">
+                <td th:text="${cliente.id}"></td>
+                <td th:text="${cliente.nome}"></td>
+                <td th:text="${cliente.email}"></td>
+                <td th:text="${cliente.cpf}"></td>
+                <td th:text="${cliente.telefone}"></td>
+                <td th:text="${cliente.sexo}"></td>
+                <td th:text="${cliente.dataNascimento}"></td>
+                <td>
+                    <a th:href="@{/clientes/{id}/editar(id=${cliente.id})}">Editar</a>
+                    <form th:action="@{/clientes/{id}/excluir(id=${cliente.id})}" method="post" style="display:inline"
+                          onsubmit="return confirm('Excluir este cliente?');">
+                        <button type="submit">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

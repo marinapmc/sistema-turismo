@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cliente - Cliente REST (T8)</title>
+</head>
+<body>
+    <h1 th:text="${cliente.id} != null ? 'Editar cliente' : 'Novo cliente'"></h1>
+
+    <p th:if="${erro}" th:text="${erro}" style="color: red;"></p>
+
+    <form th:action="${cliente.id} != null ? @{/clientes/{id}(id=${cliente.id})} : @{/clientes}"
+          th:object="${cliente}" method="post">
+
+        <div>
+            <label>Nome</label>
+            <input type="text" th:field="*{nome}" required>
+            <span th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" style="color: red;"></span>
+        </div>
+
+        <div>
+            <label>E-mail</label>
+            <input type="email" th:field="*{email}" required>
+            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red;"></span>
+        </div>
+
+        <div>
+            <label>Senha <small></small></label>
+            <input type="password" th:field="*{senha}" required>
+        </div>
+
+        <div>
+            <label>CPF (11 dígitos)</label>
+            <input type="text" th:field="*{cpf}" maxlength="11" required>
+            <span th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}" style="color: red;"></span>
+        </div>
+
+        <div>
+            <label>Telefone</label>
+            <input type="text" th:field="*{telefone}">
+        </div>
+
+        <div>
+            <label>Sexo</label>
+            <select th:field="*{sexo}">
+                <option value="">Selecione</option>
+                <option th:each="s : ${sexos}" th:value="${s}" th:text="${s}"></option>
+            </select>
+        </div>
+
+        <div>
+            <label>Data de nascimento</label>
+            <input type="date" th:field="*{dataNascimento}" required>
+            <span th:if="${#fields.hasErrors('dataNascimento')}" th:errors="*{dataNascimento}" style="color: red;"></span>
+        </div>
+
+        <input type="hidden" th:field="*{id}">
+
+        <button type="submit">Salvar</button>
+        <a th:href="@{/clientes}">Cancelar</a>
+    </form>
+</body>
+</html>

@@ -117,7 +117,7 @@ Acesse: `http://localhost:8080`
 
 ---
 
-## REST API (AA-2)
+## REST API 
 
 Todos os endpoints retornam JSON e **não requerem autenticação**.
 
@@ -145,6 +145,18 @@ Erros de validação (`@Valid`) retornam `400` com o detalhe de cada campo:
 ```json
 {"status": 400, "mensagem": "Dados inválidos.", "erros": {"cpf": "CPF deve conter exatamente 11 dígitos numéricos."}}
 ```
+
+---
+
+## Aplicação Cliente REST 
+
+A pasta [`sistema-turismo-cliente-web/`](sistema-turismo-cliente-web/) contém um segundo projeto
+Maven, independente deste, que consome o CRUD de clientes exposto pela REST API acima usando
+`RestClient` + Spring MVC + Thymeleaf. Ele não acessa o banco de dados diretamente — toda
+persistência passa pela API deste projeto.
+
+Veja o passo a passo de execução (como subir os dois projetos juntos, portas usadas, etc.) no
+[README da pasta](sistema-turismo-cliente-web/README.md).
 
 ---
 
